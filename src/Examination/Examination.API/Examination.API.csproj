@@ -2,10 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-  </PropertyGroup>
+  </PropertyGroup> 
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup> 
+
+  <ItemGroup>
+    <ProjectReference Include="..\Examination.Infrastructure\Examination.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
