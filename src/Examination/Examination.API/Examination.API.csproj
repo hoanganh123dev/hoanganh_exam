@@ -2,14 +2,23 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-  </PropertyGroup> 
+    <UserSecretsId>6570e7f7-76e1-4090-b126-07295cf3c52f</UserSecretsId>
+  </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.13.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-  </ItemGroup> 
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Examination.Infrastructure\Examination.Infrastructure.csproj" />
+    <ProjectReference Include="..\Examination.Application\Examination.Application.csproj" />
   </ItemGroup>
 
 </Project>
