@@ -13,3 +13,4 @@ công nghệ và phần mềm sử dụng
 - Exam API: https://localhost:5002
 - Exam Admin: https://localhost:6001
 - Exam Portal: https://localhost:6002
+--clone quickstart UI: iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/IdentityServer/IdentityServer4.Quickstart.UI/main/getmain.ps1'))

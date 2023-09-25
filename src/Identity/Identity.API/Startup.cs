@@ -131,6 +131,7 @@ namespace Identity.API
             app.UseAuthentication();
 
             app.UseRouting();
+            app.UseStaticFiles();
             app.UseIdentityServer();
 
             app.UseAuthorization();
@@ -164,7 +165,9 @@ namespace Identity.API
                             }
                         );
 
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                            name: "default",
+                            pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
