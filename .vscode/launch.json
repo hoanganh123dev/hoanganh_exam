@@ -4,57 +4,73 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "compounds": [
-        {
-          "name": "Run All Solution",
-          "configurations": ["Identity.API", "Exam.API"]
-        }
-      ],
+      {
+        "name": "Run All Solution",
+        "configurations": ["Identity.STS.Identity", "Exam.API", "Identity.Admin"]
+      }
+    ],
+  
     "configurations": [
-        {
-            "name": "Identity.API",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/Identity/Identity.API/bin/Debug/net5.0/Identity.API.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/src/Identity/Identity.API",
-            "stopAtEntry": false,
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",                
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
-            }
+      {
+        "name": "Identity.STS.Identity",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        "program": "${workspaceFolder}/src/Identity/Identity.STS.Identity/bin/Debug/net5.0/Identity.STS.Identity.dll",
+        "args": [],
+        "cwd": "${workspaceFolder}/src/Identity/Identity.STS.Identity",
+        "stopAtEntry": false,
+        "serverReadyAction": {
+          "action": "openExternally",
+          "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
         },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach"
+        "env": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
         },
-        {
-            "name": "Exam.API",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/Examination/Examination.API/bin/Debug/net5.0/Examination.API.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/src/Examination/Examination.API",
-            "stopAtEntry": false,
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
-                "uriFormat": "%s/swagger"  
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
-            }
-        }       
+        "sourceFileMap": {
+          "/Views": "${workspaceFolder}/Views"
+        }
+      },
+      {
+        "name": "Exam.API",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        "program": "${workspaceFolder}/src/Examination/Examination.API/bin/Debug/net5.0/Examination.API.dll",
+        "args": [],
+        "cwd": "${workspaceFolder}/src/Examination/Examination.API",
+        "stopAtEntry": false,
+        "serverReadyAction": {
+          "action": "openExternally",
+          "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+          "uriFormat": "%s/swagger"
+        },
+        "env": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
+        },
+        "sourceFileMap": {
+          "/Views": "${workspaceFolder}/Views"
+        }
+      },
+      {
+        "name": "Identity.Admin",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        "program": "${workspaceFolder}/src/Identity/Identity.Admin/bin/Debug/net5.0/Identity.Admin.dll",
+        "args": [],
+        "cwd": "${workspaceFolder}/src/Identity/Identity.Admin",
+        "stopAtEntry": false,
+        "serverReadyAction": {
+          "action": "openExternally",
+          "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+        },
+        "env": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
+        },
+        "sourceFileMap": {
+          "/Views": "${workspaceFolder}/Views"
+        }
+      }
     ]
-}
+  }
