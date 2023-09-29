@@ -1,9 +1,15 @@
 using System;
 using System.IO;
 using System.Reflection;
+using Examination.Infrastructure;
+using Examination.Infrastructure.SeedWork;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 using Serilog;
 
 namespace Examination.API
@@ -20,9 +26,20 @@ namespace Examination.API
             {
                 Log.Information("Starting web host ({ApplicationContext})...", appName);
 
-                var host = CreateHostBuilder(args).Build();
+                var host = CreateHostBuilder(configuration, args).Build();
 
                 Log.Information("Apply configuration web host ({ApplicationContext})...", appName);
+
+                using (var scope = host.Services.CreateScope())
+                {
+                    var services = scope.ServiceProvider;
+                    var logger = services.GetRequiredService<ILogger<ExamMongoDbSeeding>>();
+                    var settings = services.GetRequiredService<IOptions<ExamSettings>>();
+                    var mongoClient = services.GetRequiredService<IMongoClient>();
+                    new ExamMongoDbSeeding()
+                        .SeedAsync(mongoClient, settings, logger)
+                        .Wait();
+                }
 
                 host.Run();
 
@@ -63,10 +80,13 @@ namespace Examination.API
         }
 
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        public static IHostBuilder CreateHostBuilder(IConfiguration configuration, string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.CaptureStartupErrors(false);
+                    webBuilder.ConfigureAppConfiguration(x => x.AddConfiguration(configuration));
+
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseSerilog();
                 });
