@@ -20,7 +20,7 @@
       {
         "Name": "MSSqlServer",
         "Args": {
-          "connectionString": "Server=.;Database=IdentityDb;Trusted_Connection=True;MultipleActiveResultSets=true",
+          "connectionString": "Server=.;Database=Identity;User Id=sa;PassWord=Admin@123$;",
           "tableName": "Log",
           "columnOptionsSection": {
             "addStandardColumns": [ "LogEvent" ],
