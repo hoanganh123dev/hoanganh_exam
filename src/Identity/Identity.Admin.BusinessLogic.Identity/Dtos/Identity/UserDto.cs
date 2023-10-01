@@ -6,7 +6,7 @@ using Identity.Admin.BusinessLogic.Identity.Dtos.Identity.Interfaces;
 namespace Identity.Admin.BusinessLogic.Identity.Dtos.Identity
 {
     public class UserDto<TKey> : BaseUserDto<TKey>, IUserDto
-    {        
+    {
         [Required]
         [RegularExpression(@"^[a-zA-Z0-9_@\-\.\+]+$")]
         public string UserName { get; set; }

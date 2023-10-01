@@ -4,6 +4,6 @@ namespace Identity.Shared.Dtos.Identity
 {
     public class IdentityRolesDto : RolesDto<IdentityRoleDto, string>
     {
-        
+
     }
 }

@@ -19,7 +19,7 @@ namespace Identity.Admin.BusinessLogic.Identity.Resources
         ResourceMessage UserClaimsDeleteFailed();
         ResourceMessage UserCreateFailed();
         ResourceMessage UserDeleteFailed();
-        ResourceMessage UserDoesNotExist(); 
+        ResourceMessage UserDoesNotExist();
         ResourceMessage UserChangePasswordFailed();
         ResourceMessage UserProviderDeleteFailed();
         ResourceMessage UserProviderDoesNotExist();

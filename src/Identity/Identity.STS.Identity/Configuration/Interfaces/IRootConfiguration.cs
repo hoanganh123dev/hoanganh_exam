@@ -1,4 +1,4 @@
-﻿using Identity.Shared.Configuration.Configuration.Identity;
+﻿using Identity.Shared.Configuration.Identity;
 
 namespace Identity.STS.Identity.Configuration.Interfaces
 {

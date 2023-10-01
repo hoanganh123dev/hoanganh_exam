@@ -12,7 +12,8 @@ using Identity.STS.Identity.Configuration.Constants;
 using Identity.STS.Identity.Configuration.Interfaces;
 using Identity.STS.Identity.Helpers;
 using System;
-using Identity.Shared.Configuration.Helpers;
+using Microsoft.AspNetCore.DataProtection;
+using Identity.Shared.Helpers;
 
 namespace Identity.STS.Identity
 {

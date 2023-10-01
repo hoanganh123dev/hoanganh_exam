@@ -26,7 +26,7 @@ namespace Identity.Admin.EntityFramework.Repositories
         {
             var logsToDelete = await DbContext.Logs.Where(x => x.TimeStamp < deleteOlderThan.Date).ToListAsync();
 
-            if(logsToDelete.Count == 0) return;
+            if (logsToDelete.Count == 0) return;
 
             DbContext.Logs.RemoveRange(logsToDelete);
 
@@ -38,7 +38,7 @@ namespace Identity.Admin.EntityFramework.Repositories
             var pagedList = new PagedList<Log>();
             Expression<Func<Log, bool>> searchCondition = x => x.LogEvent.Contains(search) || x.Message.Contains(search) || x.Exception.Contains(search);
             var logs = await DbContext.Logs
-                .WhereIf(!string.IsNullOrEmpty(search), searchCondition)                
+                .WhereIf(!string.IsNullOrEmpty(search), searchCondition)
                 .PageBy(x => x.Id, page, pageSize)
                 .ToListAsync();
 

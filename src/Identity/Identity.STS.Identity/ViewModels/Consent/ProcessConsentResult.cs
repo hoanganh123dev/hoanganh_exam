@@ -4,15 +4,13 @@
 // Original file: https://github.com/IdentityServer/IdentityServer4.Quickstart.UI
 // Modified by Jan �koruba
 
-using IdentityServer4.Models;
-
 namespace Identity.STS.Identity.ViewModels.Consent
 {
     public class ProcessConsentResult
     {
         public bool IsRedirect => RedirectUri != null;
         public string RedirectUri { get; set; }
-        public Client Client { get; set; }
+        public string ClientId { get; set; }
 
         public bool ShowView => ViewModel != null;
         public ConsentViewModel ViewModel { get; set; }

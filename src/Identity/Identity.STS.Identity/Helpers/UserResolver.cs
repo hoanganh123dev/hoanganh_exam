@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Identity.STS.Identity.Configuration;
 using System.Threading.Tasks;
-using Identity.Shared.Configuration.Configuration.Identity;
+using Identity.Shared.Configuration.Identity;
 
 namespace Identity.STS.Identity.Helpers
 {

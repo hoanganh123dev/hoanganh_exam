@@ -3,18 +3,22 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.KeyVault;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Identity.Admin.EntityFramework.Configuration.Configuration;
+using Identity.Admin.Configuration;
 using Identity.Admin.EntityFramework.Shared.DbContexts;
 using Identity.Admin.EntityFramework.Shared.Entities.Identity;
-using Identity.Admin.EntityFramework.Shared.Helpers;
-using Identity.Shared.Configuration.Helpers;
+using Identity.Admin.Helpers;
+using Identity.Shared.Configuration.Common;
+using Identity.Shared.Helpers;
 
 namespace Identity.Admin
 {
-	public class Program
+    public class Program
     {
         private const string SeedArgs = "/seed";
 
@@ -119,7 +123,6 @@ namespace Identity.Admin
                 {
                     webBuilder.ConfigureKestrel(options => options.AddServerHeader = false);
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseIISIntegration();
                 })
                 .UseSerilog((hostContext, loggerConfig) =>
                 {

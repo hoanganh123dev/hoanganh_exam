@@ -159,7 +159,7 @@ namespace Identity.Admin.BusinessLogic.Services
             var originalIdentityResource = await GetIdentityResourceAsync(resource.Id);
 
             var updated = await IdentityResourceRepository.UpdateIdentityResourceAsync(resource);
-            
+
             await AuditEventLogger.LogEventAsync(new IdentityResourceUpdatedEvent(originalIdentityResource, identityResource));
 
             return updated;

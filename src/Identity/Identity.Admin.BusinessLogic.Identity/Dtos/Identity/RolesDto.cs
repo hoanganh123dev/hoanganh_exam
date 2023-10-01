@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Identity.Admin.BusinessLogic.Identity.Dtos.Identity
 {
-    public class RolesDto<TRoleDto, TKey>: IRolesDto where TRoleDto : RoleDto<TKey>
+    public class RolesDto<TRoleDto, TKey> : IRolesDto where TRoleDto : RoleDto<TKey>
     {
         public RolesDto()
         {

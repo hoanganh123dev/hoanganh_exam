@@ -19,18 +19,15 @@ using Identity.STS.Identity.Configuration.Constants;
 using Identity.STS.Identity.Configuration.Interfaces;
 using Identity.STS.Identity.Helpers.Localization;
 using System.Linq;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Identity.Admin.EntityFramework.Interfaces;
+using Identity.Admin.EntityFramework.Shared.Configuration;
+using Identity.Admin.EntityFramework.SqlServer.Extensions;
 using Identity.Admin.EntityFramework.Helpers;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Identity.Web;
-using Identity.Admin.EntityFramework.Configuration.Configuration;
-using Identity.Admin.EntityFramework.Configuration.MySql;
-using Identity.Admin.EntityFramework.Configuration.PostgreSQL;
-using Identity.Admin.EntityFramework.Configuration.SqlServer;
-using Identity.Shared.Configuration.Authentication;
-using Identity.Shared.Configuration.Configuration.Identity;
-using Identity.STS.Identity.Services;
+using Identity.Shared.Authentication;
+using Identity.Shared.Configuration.Identity;
 
 namespace Identity.STS.Identity.Helpers
 {
@@ -178,12 +175,6 @@ namespace Identity.STS.Identity.Helpers
             {
                 case DatabaseProviderType.SqlServer:
                     services.RegisterSqlServerDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TDataProtectionDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString, dataProtectionConnectionString);
-                    break;
-                case DatabaseProviderType.PostgreSQL:
-                    services.RegisterNpgSqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TDataProtectionDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString, dataProtectionConnectionString);
-                    break;
-                case DatabaseProviderType.MySql:
-                    services.RegisterMySqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TDataProtectionDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString, dataProtectionConnectionString);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(databaseProvider.ProviderType), $@"The value needs to be one of {string.Join(", ", Enum.GetNames(typeof(DatabaseProviderType)))}.");
@@ -334,7 +325,12 @@ namespace Identity.STS.Identity.Helpers
                     options.Events.RaiseInformationEvents = true;
                     options.Events.RaiseFailureEvents = true;
                     options.Events.RaiseSuccessEvents = true;
-                    
+
+                    if (!string.IsNullOrEmpty(advancedConfiguration.PublicOrigin))
+                    {
+                        options.PublicOrigin = advancedConfiguration.PublicOrigin;
+                    }
+
                     if (!string.IsNullOrEmpty(advancedConfiguration.IssuerUri))
                     {
                         options.IssuerUri = advancedConfiguration.IssuerUri;
@@ -347,7 +343,7 @@ namespace Identity.STS.Identity.Helpers
             builder.AddCustomSigningCredential(configuration);
             builder.AddCustomValidationKey(configuration);
             builder.AddExtensionGrantValidator<DelegationGrantValidator>();
-            builder.AddCustomUserStore();
+
             return builder;
         }
 
@@ -367,22 +363,22 @@ namespace Identity.STS.Identity.Helpers
                 {
                     options.ClientId = externalProviderConfiguration.GitHubClientId;
                     options.ClientSecret = externalProviderConfiguration.GitHubClientSecret;
-                    options.CallbackPath = externalProviderConfiguration.GitHubCallbackPath;
                     options.Scope.Add("user:email");
                 });
             }
 
             if (externalProviderConfiguration.UseAzureAdProvider)
             {
-                authenticationBuilder.AddMicrosoftIdentityWebApp(options =>
-                {
-                    options.ClientSecret = externalProviderConfiguration.AzureAdSecret;
-                    options.ClientId = externalProviderConfiguration.AzureAdClientId;
-                    options.TenantId = externalProviderConfiguration.AzureAdTenantId;
-                    options.Instance = externalProviderConfiguration.AzureInstance;
-                    options.Domain = externalProviderConfiguration.AzureDomain;
-                    options.CallbackPath = externalProviderConfiguration.AzureAdCallbackPath;
-                });
+                authenticationBuilder.AddAzureAD(AzureADDefaults.AuthenticationScheme, AzureADDefaults.OpenIdScheme, AzureADDefaults.CookieScheme, AzureADDefaults.DisplayName, options =>
+                     {
+                         options.ClientSecret = externalProviderConfiguration.AzureAdSecret;
+                         options.ClientId = externalProviderConfiguration.AzureAdClientId;
+                         options.TenantId = externalProviderConfiguration.AzureAdTenantId;
+                         options.Instance = externalProviderConfiguration.AzureInstance;
+                         options.Domain = externalProviderConfiguration.AzureDomain;
+                         options.CallbackPath = externalProviderConfiguration.AzureAdCallbackPath;
+                         options.CookieSchemeName = IdentityConstants.ExternalScheme;
+                     });
             }
         }
 
@@ -451,24 +447,6 @@ namespace Identity.STS.Identity.Helpers
                             .AddSqlServer(dataProtectionDbConnectionString, name: "DataProtectionDb",
                                 healthQuery: $"SELECT TOP 1 * FROM dbo.[{dataProtectionTableName}]");
 
-                        break;
-                    case DatabaseProviderType.PostgreSQL:
-                        healthChecksBuilder
-                            .AddNpgSql(configurationDbConnectionString, name: "ConfigurationDb",
-                                healthQuery: $"SELECT * FROM \"{configurationTableName}\" LIMIT 1")
-                            .AddNpgSql(persistedGrantsDbConnectionString, name: "PersistentGrantsDb",
-                                healthQuery: $"SELECT * FROM \"{persistedGrantTableName}\" LIMIT 1")
-                            .AddNpgSql(identityDbConnectionString, name: "IdentityDb",
-                                healthQuery: $"SELECT * FROM \"{identityTableName}\" LIMIT 1")
-                            .AddNpgSql(dataProtectionDbConnectionString, name: "DataProtectionDb",
-                                healthQuery: $"SELECT * FROM \"{dataProtectionTableName}\"  LIMIT 1");
-                        break;
-                    case DatabaseProviderType.MySql:
-                        healthChecksBuilder
-                            .AddMySql(configurationDbConnectionString, name: "ConfigurationDb")
-                            .AddMySql(persistedGrantsDbConnectionString, name: "PersistentGrantsDb")
-                            .AddMySql(identityDbConnectionString, name: "IdentityDb")
-                            .AddMySql(dataProtectionDbConnectionString, name: "DataProtectionDb");
                         break;
                     default:
                         throw new NotImplementedException($"Health checks not defined for database provider {databaseProvider.ProviderType}");

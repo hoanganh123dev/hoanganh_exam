@@ -1,4 +1,5 @@
-﻿using Identity.Shared.Configuration.Configuration.Identity;
+﻿using Identity.Shared.Configuration.Identity;
+using Identity.STS.Identity.Configuration;
 
 namespace Identity.STS.Identity.Helpers.Localization
 {

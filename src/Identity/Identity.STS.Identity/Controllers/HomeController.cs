@@ -10,7 +10,6 @@ using IdentityServer4.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-using Identity.Shared.Configuration.Helpers;
 using Identity.STS.Identity.Helpers;
 using Identity.STS.Identity.ViewModels.Home;
 
@@ -32,7 +31,6 @@ namespace Identity.STS.Identity.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
             Response.Cookies.Append(
@@ -40,19 +38,6 @@ namespace Identity.STS.Identity.Controllers
                 CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
                 new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
             );
-            return LocalRedirect(returnUrl);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult SelectTheme(string theme, string returnUrl)
-        {
-            Response.Cookies.Append(
-                ThemeHelpers.CookieThemeKey,
-                theme,
-                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
-            );
-
             return LocalRedirect(returnUrl);
         }
 

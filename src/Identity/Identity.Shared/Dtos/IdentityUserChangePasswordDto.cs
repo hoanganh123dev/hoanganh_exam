@@ -4,6 +4,6 @@ namespace Identity.Shared.Dtos
 {
     public class IdentityUserChangePasswordDto : UserChangePasswordDto<string>
     {
-        
+
     }
 }

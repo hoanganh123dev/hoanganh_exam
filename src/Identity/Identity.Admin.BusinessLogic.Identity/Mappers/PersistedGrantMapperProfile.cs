@@ -22,7 +22,7 @@ namespace Identity.Admin.BusinessLogic.Identity.Mappers
 
             CreateMap<PagedList<PersistedGrant>, PersistedGrantsDto>(MemberList.Destination)
                 .ForMember(x => x.PersistedGrants,
-                    opt => opt.MapFrom(src => src.Data));            
+                    opt => opt.MapFrom(src => src.Data));
         }
     }
 }

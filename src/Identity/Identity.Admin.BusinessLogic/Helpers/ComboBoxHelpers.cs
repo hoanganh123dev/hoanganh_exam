@@ -3,26 +3,26 @@ using Newtonsoft.Json;
 
 namespace Identity.Admin.BusinessLogic.Helpers
 {
-	public static class ComboBoxHelpers
-	{
-		public static void PopulateValuesToList(string jsonValues, List<string> list)
-		{
-			if (string.IsNullOrEmpty(jsonValues)) return;
+    public static class ComboBoxHelpers
+    {
+        public static void PopulateValuesToList(string jsonValues, List<string> list)
+        {
+            if (string.IsNullOrEmpty(jsonValues)) return;
 
-			var listValues = JsonConvert.DeserializeObject<List<string>>(jsonValues);
-			if (listValues == null) return;
+            var listValues = JsonConvert.DeserializeObject<List<string>>(jsonValues);
+            if (listValues == null) return;
 
-			list.AddRange(listValues);
-		}
+            list.AddRange(listValues);
+        }
 
-	    public static void PopulateValue(string jsonValue)
-	    {
-	        if (string.IsNullOrEmpty(jsonValue)) return;
+        public static void PopulateValue(string jsonValue)
+        {
+            if (string.IsNullOrEmpty(jsonValue)) return;
 
-	        var selectedValue = JsonConvert.DeserializeObject<string>(jsonValue);
-	        if (selectedValue == null) return;
+            var selectedValue = JsonConvert.DeserializeObject<string>(jsonValue);
+            if (selectedValue == null) return;
 
-	        jsonValue = selectedValue;
-	    }
+            jsonValue = selectedValue;
+        }
     }
 }

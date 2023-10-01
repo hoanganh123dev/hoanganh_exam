@@ -45,7 +45,7 @@
 					</div>
 				}
 
-				@if (Model.ApiScopes.Any())
+				@if (Model.ResourceScopes.Any())
 				{
 					<div class="col-sm-12">
 						<div class="card mt-3">
@@ -55,7 +55,7 @@
 							<div class="card-body">
 
 								<ul class="list-group">
-									@foreach (var scope in Model.ApiScopes)
+									@foreach (var scope in Model.ResourceScopes)
 									{
 										@await Html.PartialAsync("_ScopeListItem", scope)
 									}

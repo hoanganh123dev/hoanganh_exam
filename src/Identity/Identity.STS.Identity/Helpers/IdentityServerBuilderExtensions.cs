@@ -1,10 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Extensions.Configuration;
-using Identity.Shared.Configuration.Configuration.Common;
-using Identity.Shared.Configuration.Helpers;
+using Microsoft.Extensions.Logging;
+using Identity.Shared.Configuration.Common;
+using Identity.Shared.Helpers;
+using Identity.STS.Identity.Configuration;
 
 namespace Identity.STS.Identity.Helpers
 {

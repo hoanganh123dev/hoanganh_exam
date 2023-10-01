@@ -24,7 +24,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using Identity.Shared.Configuration.Configuration.Identity;
+using Identity.Shared.Configuration.Identity;
 using Identity.STS.Identity.Configuration;
 using Identity.STS.Identity.Helpers;
 using Identity.STS.Identity.Helpers.Localization;
@@ -120,14 +120,14 @@ namespace Identity.STS.Identity.Controllers
                     // if the user cancels, send a result back into IdentityServer as if they 
                     // denied the consent (even if this client does not require consent).
                     // this will send back an access denied OIDC error response to the client.
-                    await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
+                    await _interaction.GrantConsentAsync(context, ConsentResponse.Denied);
 
                     // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-                    if (context.IsNativeClient())
+                    if (await _clientStore.IsPkceClientAsync(context.ClientId))
                     {
-                        // The client is native, so this change in how to
+                        // if the client is PKCE then we assume it's native, so this change in how to
                         // return the response is for better UX for the end user.
-                        return this.LoadingPage("Redirect", model.ReturnUrl);
+                        return View("Redirect", new RedirectViewModel { RedirectUrl = model.ReturnUrl });
                     }
 
                     return Redirect(model.ReturnUrl);
@@ -149,11 +149,11 @@ namespace Identity.STS.Identity.Controllers
 
                         if (context != null)
                         {
-                            if (context.IsNativeClient())
+                            if (await _clientStore.IsPkceClientAsync(context.ClientId))
                             {
-                                // The client is native, so this change in how to
+                                // if the client is PKCE then we assume it's native, so this change in how to
                                 // return the response is for better UX for the end user.
-                                return this.LoadingPage("Redirect", model.ReturnUrl);
+                                return View("Redirect", new RedirectViewModel { RedirectUrl = model.ReturnUrl });
                             }
 
                             // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
@@ -185,7 +185,7 @@ namespace Identity.STS.Identity.Controllers
                         return View("Lockout");
                     }
                 }
-                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId: context?.Client.ClientId));
+                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
                 ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
             }
 
@@ -583,12 +583,15 @@ namespace Identity.STS.Identity.Controllers
 
             ViewData["ReturnUrl"] = returnUrl;
 
-            return _loginConfiguration.ResolutionPolicy switch
+            switch (_loginConfiguration.ResolutionPolicy)
             {
-                LoginResolutionPolicy.Username => View(),
-                LoginResolutionPolicy.Email => View("RegisterWithoutUsername"),
-                _ => View("RegisterFailure")
-            };
+                case LoginResolutionPolicy.Username:
+                    return View();
+                case LoginResolutionPolicy.Email:
+                    return View("RegisterWithoutUsername");
+                default:
+                    return View("RegisterFailure");
+            }
         }
 
         [HttpPost]
@@ -596,9 +599,7 @@ namespace Identity.STS.Identity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null, bool IsCalledFromRegisterWithoutUsername = false)
         {
-            if (!_registerConfiguration.Enabled) return View("RegisterFailure");
-
-            returnUrl ??= Url.Content("~/");
+            returnUrl = returnUrl ?? Url.Content("~/");
 
             ViewData["ReturnUrl"] = returnUrl;
 
@@ -690,40 +691,35 @@ namespace Identity.STS.Identity.Controllers
         private async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
         {
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
-            if (context?.IdP != null && await _schemeProvider.GetSchemeAsync(context.IdP) != null)
+            if (context?.IdP != null)
             {
-                var local = context.IdP == IdentityServerConstants.LocalIdentityProvider;
-
                 // this is meant to short circuit the UI and only trigger the one external IdP
-                var vm = new LoginViewModel
+                return new LoginViewModel
                 {
-                    EnableLocalLogin = local,
+                    EnableLocalLogin = false,
                     ReturnUrl = returnUrl,
                     Username = context?.LoginHint,
+                    LoginResolutionPolicy = _loginConfiguration.ResolutionPolicy,
+                    ExternalProviders = new ExternalProvider[] { new ExternalProvider { AuthenticationScheme = context.IdP } }
                 };
-
-                if (!local)
-                {
-                    vm.ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context.IdP } };
-                }
-
-                return vm;
             }
 
             var schemes = await _schemeProvider.GetAllSchemesAsync();
 
             var providers = schemes
-                .Where(x => x.DisplayName != null)
+                .Where(x => x.DisplayName != null ||
+                            (x.Name.Equals(AccountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
+                )
                 .Select(x => new ExternalProvider
                 {
-                    DisplayName = x.DisplayName ?? x.Name,
+                    DisplayName = x.DisplayName,
                     AuthenticationScheme = x.Name
                 }).ToList();
 
             var allowLocal = true;
-            if (context?.Client.ClientId != null)
+            if (context?.ClientId != null)
             {
-                var client = await _clientStore.FindEnabledClientByIdAsync(context.Client.ClientId);
+                var client = await _clientStore.FindEnabledClientByIdAsync(context.ClientId);
                 if (client != null)
                 {
                     allowLocal = client.EnableLocalLogin;
@@ -741,6 +737,7 @@ namespace Identity.STS.Identity.Controllers
                 EnableLocalLogin = allowLocal && AccountOptions.AllowLocalLogin,
                 ReturnUrl = returnUrl,
                 Username = context?.LoginHint,
+                LoginResolutionPolicy = _loginConfiguration.ResolutionPolicy,
                 ExternalProviders = providers.ToArray()
             };
         }

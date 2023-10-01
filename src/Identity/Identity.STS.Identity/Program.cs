@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Identity.Shared.Configuration.Helpers;
+using Identity.Shared.Helpers;
 
 namespace Identity.STS.Identity
 {
@@ -86,7 +86,6 @@ namespace Identity.STS.Identity
                 {
                     webBuilder.ConfigureKestrel(options => options.AddServerHeader = false);
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseIISIntegration();
                 })
                 .UseSerilog((hostContext, loggerConfig) =>
                 {

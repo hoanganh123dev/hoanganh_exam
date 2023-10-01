@@ -6,7 +6,6 @@
 using AutoMapper;
 using IdentityServer4.EntityFramework.Entities;
 using Identity.Admin.BusinessLogic.Dtos.Configuration;
-using Identity.Admin.BusinessLogic.Mappers.Converters;
 using Identity.Admin.BusinessLogic.Shared.Dtos.Common;
 using Identity.Admin.EntityFramework.Extensions.Common;
 
@@ -19,9 +18,7 @@ namespace Identity.Admin.BusinessLogic.Mappers
             // entity to model
             CreateMap<Client, ClientDto>(MemberList.Destination)
                 .ForMember(dest => dest.ProtocolType, opt => opt.Condition(srs => srs != null))
-                .ForMember(x => x.AllowedIdentityTokenSigningAlgorithms, opts => opts.ConvertUsing(AllowedSigningAlgorithmsConverter.Converter, x => x.AllowedIdentityTokenSigningAlgorithms))
-                .ReverseMap()
-                .ForMember(x => x.AllowedIdentityTokenSigningAlgorithms, opts => opts.ConvertUsing(AllowedSigningAlgorithmsConverter.Converter, x => x.AllowedIdentityTokenSigningAlgorithms));
+                .ReverseMap();
 
             CreateMap<SelectItem, SelectItemDto>(MemberList.Destination)
                 .ReverseMap();

@@ -16,7 +16,8 @@
 	@if (Model.PostLogoutRedirectUri != null)
 	{
 		<div>
-			@Localizer["Click"] <a class="PostLogoutRedirectUri" href="@Model.PostLogoutRedirectUri">@Localizer["Here"]</a> @Localizer["Return"]
+			@Localizer["Click"] <a class="PostLogoutRedirectUri" href="@Model.PostLogoutRedirectUri">@Localizer["Here"]</a>
+			@Localizer["Return"]
 			<span>@Model.ClientName</span>.
 		</div>
 	}
@@ -28,9 +29,9 @@
 </div>
 
 @section scripts
-	{
-	@if (Model.AutomaticRedirectAfterSignOut)
-	{
-		<script src="~/js/signout-redirect.js"></script>
-	}
+{
+@if (Model.AutomaticRedirectAfterSignOut)
+{
+<script src="~/js/signout-redirect.js"></script>
+}
 }

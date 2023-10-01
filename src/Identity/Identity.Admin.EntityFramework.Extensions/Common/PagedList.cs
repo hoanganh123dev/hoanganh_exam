@@ -2,7 +2,7 @@
 
 namespace Identity.Admin.EntityFramework.Extensions.Common
 {
-    public class PagedList<T> where T : class 
+    public class PagedList<T> where T : class
     {
         public PagedList()
         {

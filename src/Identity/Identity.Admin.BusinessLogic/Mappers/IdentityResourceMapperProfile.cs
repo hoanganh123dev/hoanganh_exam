@@ -36,7 +36,7 @@ namespace Identity.Admin.BusinessLogic.Mappers
 
             // model to entity
             CreateMap<IdentityResourceDto, IdentityResource>(MemberList.Source)
-                .ForMember(x => x.UserClaims, opts => opts.MapFrom(src => src.UserClaims.Select(x => new IdentityResourceClaim { Type = x })));
+                .ForMember(x => x.UserClaims, opts => opts.MapFrom(src => src.UserClaims.Select(x => new IdentityClaim { Type = x })));
 
             CreateMap<IdentityResourcePropertiesDto, IdentityResourceProperty>(MemberList.Source)
                 .ForMember(x => x.IdentityResource, dto => dto.MapFrom(src => new IdentityResource() { Id = src.IdentityResourceId }))

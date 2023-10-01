@@ -1,19 +1,25 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Skoruba.AuditLogging.EntityFramework.Entities;
-using Identity.Admin.Configuration.Database;
+using Identity.Admin.BusinessLogic.Identity.Dtos.Identity;
+using Identity.Admin.Configuration.Interfaces;
 using Identity.Admin.EntityFramework.Shared.DbContexts;
 using Identity.Admin.EntityFramework.Shared.Entities.Identity;
-using Identity.Shared.Configuration.Helpers;
+using Identity.Admin.Helpers;
+using Identity.Admin.Configuration;
+using Identity.Admin.Configuration.Constants;
+using System;
+using Microsoft.AspNetCore.DataProtection;
 using Identity.Shared.Dtos;
 using Identity.Shared.Dtos.Identity;
-using System.Net;
+using Identity.Shared.Helpers;
 
 namespace Identity.Admin
 {
@@ -32,51 +38,135 @@ namespace Identity.Admin
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Adds the IdentityServer4 Admin UI with custom options.
-            services.AddIdentityServer4AdminUI<AdminIdentityDbContext, IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext,
-            AdminLogDbContext, AdminAuditLogDbContext, AuditLog, IdentityServerDataProtectionDbContext,
-                UserIdentity, UserIdentityRole, UserIdentityUserClaim, UserIdentityUserRole,
-                UserIdentityUserLogin, UserIdentityRoleClaim, UserIdentityUserToken, string,
-                IdentityUserDto, IdentityRoleDto, IdentityUsersDto, IdentityRolesDto, IdentityUserRolesDto,
-                IdentityUserClaimsDto, IdentityUserProviderDto, IdentityUserProvidersDto, IdentityUserChangePasswordDto,
-                IdentityRoleClaimsDto, IdentityUserClaimDto, IdentityRoleClaimDto>(ConfigureUIOptions);
+            var rootConfiguration = CreateRootConfiguration();
+            services.AddSingleton(rootConfiguration);
+
+            // Add DbContexts for Asp.Net Core Identity, Logging and IdentityServer - Configuration store and Operational store
+            RegisterDbContexts(services);
+
+            // Save data protection keys to db, using a common application name shared between Admin and STS
+            services.AddDataProtection<IdentityServerDataProtectionDbContext>(Configuration);
 
             // Add email senders which is currently setup for SendGrid and SMTP
             services.AddEmailSenders(Configuration);
+
+            // Add Asp.Net Core Identity Configuration and OpenIdConnect auth as well
+            RegisterAuthentication(services);
+
+            // Add HSTS options
+            RegisterHstsOptions(services);
+
+            // Add exception filters in MVC
+            services.AddMvcExceptionFilters();
+
+            // Add all dependencies for IdentityServer Admin
+            services.AddAdminServices<IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminLogDbContext>();
+
+            // Add all dependencies for Asp.Net Core Identity
+            // If you want to change primary keys or use another db model for Asp.Net Core Identity:
+            services.AddAdminAspNetIdentityServices<AdminIdentityDbContext, IdentityServerPersistedGrantDbContext,
+                IdentityUserDto, IdentityRoleDto, UserIdentity, UserIdentityRole, string, UserIdentityUserClaim, UserIdentityUserRole,
+                                UserIdentityUserLogin, UserIdentityRoleClaim, UserIdentityUserToken,
+                                IdentityUsersDto, IdentityRolesDto, IdentityUserRolesDto,
+                                IdentityUserClaimsDto, IdentityUserProviderDto, IdentityUserProvidersDto, IdentityUserChangePasswordDto,
+                                IdentityRoleClaimsDto, IdentityUserClaimDto, IdentityRoleClaimDto>();
+
+            // Add all dependencies for Asp.Net Core Identity in MVC - these dependencies are injected into generic Controllers
+            // Including settings for MVC and Localization
+            // If you want to change primary keys or use another db model for Asp.Net Core Identity:
+            services.AddMvcWithLocalization<IdentityUserDto, IdentityRoleDto,
+                UserIdentity, UserIdentityRole, string, UserIdentityUserClaim, UserIdentityUserRole,
+                UserIdentityUserLogin, UserIdentityRoleClaim, UserIdentityUserToken,
+                IdentityUsersDto, IdentityRolesDto, IdentityUserRolesDto,
+                IdentityUserClaimsDto, IdentityUserProviderDto, IdentityUserProvidersDto, IdentityUserChangePasswordDto,
+                IdentityRoleClaimsDto, IdentityUserClaimDto, IdentityRoleClaimDto>(Configuration);
+
+            // Add authorization policies for MVC
+            RegisterAuthorization(services);
+
+            // Add audit logging
+            services.AddAuditEventLogging<AdminAuditLogDbContext, AuditLog>(Configuration);
+
+            services.AddIdSHealthChecks<IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminIdentityDbContext, AdminLogDbContext, AdminAuditLogDbContext, IdentityServerDataProtectionDbContext>(Configuration, rootConfiguration.AdminConfiguration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.UseRouting();
+            app.UseCookiePolicy();
 
-            app.UseIdentityServer4AdminUI();
-
-            app.UseEndpoints(endpoint =>
+            if (env.IsDevelopment())
             {
-                endpoint.MapIdentityServer4AdminUI();
-                endpoint.MapIdentityServer4AdminUIHealthChecks();
-            });
-        }
-
-        public virtual void ConfigureUIOptions(IdentityServer4AdminUIOptions options)
-        {
-            // Applies configuration from appsettings.
-            options.BindConfiguration(Configuration);
-            if (HostingEnvironment.IsDevelopment())
-            {
-                options.Security.UseDeveloperExceptionPage = true;
+                app.UseDeveloperExceptionPage();
             }
             else
             {
-                options.Security.UseHsts = true;
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
 
-            // Set migration assembly for application of db migrations
-            var migrationsAssembly = MigrationAssemblyConfiguration.GetMigrationAssemblyByProvider(options.DatabaseProvider);
-            options.DatabaseMigrations.SetMigrationsAssemblies(migrationsAssembly);
+            app.UsePathBase(Configuration.GetValue<string>("BasePath"));
 
-            // Use production DbContexts and auth services.
-            options.Testing.IsStaging = false;
+            // Add custom security headers
+            app.UseSecurityHeaders(Configuration);
+
+            app.UseStaticFiles();
+
+            UseAuthentication(app);
+
+            // Use Localization
+            app.ConfigureLocalization();
+
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoint =>
+            {
+                endpoint.MapDefaultControllerRoute();
+                endpoint.MapHealthChecks("/health", new HealthCheckOptions
+                {
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+            });
+        }
+
+        public virtual void RegisterDbContexts(IServiceCollection services)
+        {
+            services.RegisterDbContexts<AdminIdentityDbContext, IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminLogDbContext, AdminAuditLogDbContext, IdentityServerDataProtectionDbContext>(Configuration);
+        }
+
+        public virtual void RegisterAuthentication(IServiceCollection services)
+        {
+            var rootConfiguration = CreateRootConfiguration();
+            services.AddAuthenticationServices<AdminIdentityDbContext, UserIdentity, UserIdentityRole>(Configuration);
+        }
+
+        public virtual void RegisterAuthorization(IServiceCollection services)
+        {
+            var rootConfiguration = CreateRootConfiguration();
+            services.AddAuthorizationPolicies(rootConfiguration);
+        }
+
+        public virtual void UseAuthentication(IApplicationBuilder app)
+        {
+            app.UseAuthentication();
+        }
+
+        public virtual void RegisterHstsOptions(IServiceCollection services)
+        {
+            services.AddHsts(options =>
+            {
+                options.Preload = true;
+                options.IncludeSubDomains = true;
+                options.MaxAge = TimeSpan.FromDays(365);
+            });
+        }
+
+        protected IRootConfiguration CreateRootConfiguration()
+        {
+            var rootConfiguration = new RootConfiguration();
+            Configuration.GetSection(ConfigurationConsts.AdminConfigurationKey).Bind(rootConfiguration.AdminConfiguration);
+            Configuration.GetSection(ConfigurationConsts.IdentityDataConfigurationKey).Bind(rootConfiguration.IdentityDataConfiguration);
+            Configuration.GetSection(ConfigurationConsts.IdentityServerDataConfigurationKey).Bind(rootConfiguration.IdentityServerDataConfiguration);
+            return rootConfiguration;
         }
     }
 }

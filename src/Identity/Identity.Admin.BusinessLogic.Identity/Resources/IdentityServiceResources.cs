@@ -30,7 +30,7 @@ namespace Identity.Admin.BusinessLogic.Identity.Resources
                 Description = IdentityServiceResource.UserRoleCreateFailed
             };
         }
-    
+
         public virtual ResourceMessage UserProviderDoesNotExist()
         {
             return new ResourceMessage()

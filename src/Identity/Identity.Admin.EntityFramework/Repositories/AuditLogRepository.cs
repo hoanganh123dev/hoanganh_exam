@@ -46,7 +46,7 @@ namespace Identity.Admin.EntityFramework.Repositories
                 .WhereIf(!string.IsNullOrEmpty(category), log => log.Category.Contains(category))
                 .WhereIf(created.HasValue, log => log.Created.Date == created.Value.Date)
                 .CountAsync();
-            
+
             return pagedList;
         }
 

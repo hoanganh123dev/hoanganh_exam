@@ -16,7 +16,7 @@ using Identity.STS.Identity.Helpers.Localization;
 using Identity.STS.Identity.ViewModels.Manage;
 
 namespace Identity.STS.Identity.Controllers
-{    
+{
     [Authorize]
     public class ManageController<TUser, TKey> : Controller
         where TUser : IdentityUser<TKey>, new()
@@ -59,7 +59,7 @@ namespace Identity.STS.Identity.Controllers
 
             return View(model);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(IndexViewModel model)
@@ -94,14 +94,14 @@ namespace Identity.STS.Identity.Controllers
                     throw new ApplicationException(_localizer["ErrorSettingPhone", user.Id]);
                 }
             }
-            
+
             await UpdateUserClaimsAsync(model, user);
 
             StatusMessage = _localizer["ProfileUpdated"];
 
             return RedirectToAction(nameof(Index));
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendVerificationEmail(IndexViewModel model)

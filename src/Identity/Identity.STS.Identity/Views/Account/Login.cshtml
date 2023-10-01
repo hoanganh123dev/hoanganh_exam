@@ -32,7 +32,10 @@
                                                     <i class="fa fa-user"></i>
                                                 </span>
                                             </div>
-                                            <input class="form-control" placeholder="@Localizer[LoginPolicyResolutionLocalizer.GetUserNameLocalizationKey(Model.LoginResolutionPolicy)]" asp-for="Username" aria-label="Username" aria-describedby="input-username" autofocus>
+                                            <input class="form-control"
+                                            placeholder="@Localizer[LoginPolicyResolutionLocalizer.GetUserNameLocalizationKey(Model.LoginResolutionPolicy)]"
+                                            asp-for="Username" aria-label="Username" aria-describedby="input-username"
+                                            autofocus>
                                         </div>
                                     </div>
                                 </div>
@@ -45,7 +48,9 @@
                                                     <span class="oi oi-lock-locked" title="Lock" aria-hidden="true"></span>
                                                 </span>
                                             </div>
-                                            <input type="password" class="form-control" placeholder="@Localizer["Password"]" aria-label="Password" aria-describedby="input-password" asp-for="Password" autocomplete="off">
+                                            <input type="password" class="form-control" placeholder="@Localizer["Password"]"
+                                            aria-label="Password" aria-describedby="input-password" asp-for="Password"
+                                            autocomplete="off">
                                         </div>
                                     </div>
                                 </div>
@@ -65,14 +70,18 @@
                                 }
 
                                 <!--Button-->
-                                <div class="form-group row">
+                            <div class="form-group row">
                                     <div class="col-sm-12">
-                                        <button class="btn btn-primary" name="button" value="login">@Localizer["Login"]</button>
-                                        <button class="btn btn-secondary" name="button" value="cancel">@Localizer["Cancel"]</button>
-                                        <a asp-action="ForgotPassword" asp-controller="Account" class="btn btn-info" value="forgot">@Localizer["Forgot"]</a>                                        
+                                        <button class="btn btn-primary" name="button"
+                                        value="login">@Localizer["Login"]</button>
+                                        <button class="btn btn-secondary" name="button"
+                                        value="cancel">@Localizer["Cancel"]</button>
+                                        <a asp-action="ForgotPassword" asp-controller="Account" class="btn btn-info"
+                                        value="forgot">@Localizer["Forgot"]</a>
                                         @if (RootConfiguration.RegisterConfiguration.Enabled)
                                         {
-                                            <a asp-action="Register" asp-controller="Account" class="btn btn-dark" value="forgot">@Localizer["Register"]</a>
+                                            <a asp-action="Register" asp-controller="Account" class="btn btn-dark"
+                                        value="forgot">@Localizer["Register"]</a>
                                         }
                                     </div>
                                 </div>
@@ -93,10 +102,9 @@
                             @foreach (var provider in Model.VisibleExternalProviders)
                             {
                                 <li class="list-inline-item">
-                                    <a class="btn btn-primary"
-                                       asp-action="ExternalLogin"
-                                       asp-route-provider="@provider.AuthenticationScheme"
-                                       asp-route-returnUrl="@Model.ReturnUrl">
+                                    <a class="btn btn-primary" asp-action="ExternalLogin"
+                                asp-route-provider="@provider.AuthenticationScheme"
+                                asp-route-returnUrl="@Model.ReturnUrl">
                                         @provider.DisplayName
                                     </a>
                                 </li>

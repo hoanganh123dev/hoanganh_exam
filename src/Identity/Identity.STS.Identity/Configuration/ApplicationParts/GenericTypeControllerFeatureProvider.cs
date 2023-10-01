@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 namespace Identity.STS.Identity.Configuration.ApplicationParts
 {
     public class GenericTypeControllerFeatureProvider<TUser, TKey> : IApplicationFeatureProvider<ControllerFeature>
-        where TUser : IdentityUser<TKey>        
+        where TUser : IdentityUser<TKey>
         where TKey : IEquatable<TKey>
     {
         public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)

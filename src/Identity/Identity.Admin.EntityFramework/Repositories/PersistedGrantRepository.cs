@@ -15,7 +15,7 @@ namespace Identity.Admin.EntityFramework.Repositories
 {
     public class PersistedGrantRepository<TDbContext> : IPersistedGrantRepository
         where TDbContext : DbContext, IAdminPersistedGrantDbContext
-        
+
     {
         protected readonly TDbContext DbContext;
 

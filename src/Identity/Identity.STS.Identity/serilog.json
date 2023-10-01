@@ -20,11 +20,11 @@
       {
         "Name": "MSSqlServer",
         "Args": {
-          "connectionString": "Server=.;Database=Identity;User Id=sa;PassWord=Admin@123$;",
+          "connectionString": "",
           "tableName": "Log",
           "columnOptionsSection": {
-            "addStandardColumns": [ "LogEvent" ],
-            "removeStandardColumns": [ "Properties" ]
+            "addStandardColumns": ["LogEvent"],
+            "removeStandardColumns": ["Properties"]
           }
         }
       }

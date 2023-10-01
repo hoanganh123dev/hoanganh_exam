@@ -1,20 +1,17 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["src/Identity.STS.Identity/Identity.STS.Identity.csproj", "src/Identity.STS.Identity/"]
-COPY ["src/Identity.Shared.Configuration/Identity.Shared.Configuration.csproj", "src/Identity.Shared.Configuration/"]
-COPY ["src/Identity.Admin.EntityFramework.Shared/Identity.Admin.EntityFramework.Shared.csproj", "src/Identity.Admin.EntityFramework.Shared/"]
 COPY ["src/Identity.Admin.EntityFramework.Identity/Identity.Admin.EntityFramework.Identity.csproj", "src/Identity.Admin.EntityFramework.Identity/"]
 COPY ["src/Identity.Admin.EntityFramework/Identity.Admin.EntityFramework.csproj", "src/Identity.Admin.EntityFramework/"]
 COPY ["src/Identity.Admin.EntityFramework.Extensions/Identity.Admin.EntityFramework.Extensions.csproj", "src/Identity.Admin.EntityFramework.Extensions/"]
-COPY ["src/Identity.Admin.EntityFramework.Configuration/Identity.Admin.EntityFramework.Configuration.csproj", "src/Identity.Admin.EntityFramework.Configuration/"]
+COPY ["src/Identity.Admin.EntityFramework.Shared/Identity.Admin.EntityFramework.Shared.csproj", "src/Identity.Admin.EntityFramework.Shared/"]
+COPY ["src/Identity.Admin.EntityFramework.PostgreSQL/Identity.Admin.EntityFramework.PostgreSQL.csproj", "src/Identity.Admin.EntityFramework.PostgreSQL/"]
+COPY ["src/Identity.Admin.EntityFramework.SqlServer/Identity.Admin.EntityFramework.SqlServer.csproj", "src/Identity.Admin.EntityFramework.SqlServer/"]
 COPY ["src/Identity.Shared/Identity.Shared.csproj", "src/Identity.Shared/"]
-COPY ["src/Identity.Admin.BusinessLogic.Identity/Identity.Admin.BusinessLogic.Identity.csproj", "src/Identity.Admin.BusinessLogic.Identity/"]
-COPY ["src/Identity.Admin.BusinessLogic.Shared/Identity.Admin.BusinessLogic.Shared.csproj", "src/Identity.Admin.BusinessLogic.Shared/"]
 RUN dotnet restore "src/Identity.STS.Identity/Identity.STS.Identity.csproj"
 COPY . .
 WORKDIR "/src/src/Identity.STS.Identity"

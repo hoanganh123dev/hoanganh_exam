@@ -55,7 +55,7 @@ namespace Identity.Admin.BusinessLogic.Services
             var persistedGrantDto = persistedGrant.ToModel();
 
             await AuditEventLogger.LogEventAsync(new PersistedGrantRequestedEvent(persistedGrantDto));
-            
+
             return persistedGrantDto;
         }
 

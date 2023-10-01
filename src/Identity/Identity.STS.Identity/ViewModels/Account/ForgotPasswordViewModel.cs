@@ -1,5 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Identity.Shared.Configuration.Configuration.Identity;
+﻿using Identity.STS.Identity.Configuration;
+using System.ComponentModel.DataAnnotations;
+using Identity.Shared.Configuration.Identity;
 
 namespace Identity.STS.Identity.ViewModels.Account
 {
@@ -7,7 +8,7 @@ namespace Identity.STS.Identity.ViewModels.Account
     {
         [Required]
         public LoginResolutionPolicy? Policy { get; set; }
-        
+        //[Required]
         [EmailAddress]
         public string Email { get; set; }
 

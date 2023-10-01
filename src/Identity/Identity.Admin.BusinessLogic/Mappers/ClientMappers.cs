@@ -41,26 +41,26 @@ namespace Identity.Admin.BusinessLogic.Mappers
         {
             return Mapper.Map<ClientPropertiesDto>(clientProperties);
         }
-        
-		public static Client ToEntity(this ClientDto client)
+
+        public static Client ToEntity(this ClientDto client)
         {
             return Mapper.Map<Client>(client);
         }
 
-		public static ClientSecretsDto ToModel(this ClientSecret clientSecret)
-		{
-			return Mapper.Map<ClientSecretsDto>(clientSecret);
-		}
-        
+        public static ClientSecretsDto ToModel(this ClientSecret clientSecret)
+        {
+            return Mapper.Map<ClientSecretsDto>(clientSecret);
+        }
+
         public static ClientSecret ToEntity(this ClientSecretsDto clientSecret)
-		{
-			return Mapper.Map<ClientSecret>(clientSecret);
-		}
+        {
+            return Mapper.Map<ClientSecret>(clientSecret);
+        }
 
         public static ClientClaimsDto ToModel(this ClientClaim clientClaim)
-		{
-			return Mapper.Map<ClientClaimsDto>(clientClaim);
-		}
+        {
+            return Mapper.Map<ClientClaimsDto>(clientClaim);
+        }
 
         public static ClientPropertiesDto ToModel(this ClientProperty clientProperty)
         {
@@ -68,9 +68,9 @@ namespace Identity.Admin.BusinessLogic.Mappers
         }
 
         public static ClientClaim ToEntity(this ClientClaimsDto clientClaim)
-		{
-			return Mapper.Map<ClientClaim>(clientClaim);
-		}
+        {
+            return Mapper.Map<ClientClaim>(clientClaim);
+        }
 
         public static ClientProperty ToEntity(this ClientPropertiesDto clientProperties)
         {

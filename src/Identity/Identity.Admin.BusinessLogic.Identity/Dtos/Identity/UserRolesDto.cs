@@ -11,7 +11,7 @@ namespace Identity.Admin.BusinessLogic.Identity.Dtos.Identity
     {
         public UserRolesDto()
         {
-           Roles = new List<TRoleDto>(); 
+            Roles = new List<TRoleDto>();
         }
 
         public string UserName { get; set; }
