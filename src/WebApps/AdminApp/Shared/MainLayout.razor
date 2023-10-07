@@ -1,5 +1,7 @@
 @inherits LayoutComponentBase
-
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager;
 
 <MudThemeProvider Theme="_themeManager.Theme" />
 <MudDialogProvider />
@@ -37,7 +39,7 @@
                 <MudAvatar Image="images/avatar_jonny.jpg" />
             </ActivatorContent>
             <ChildContent>
-                <PersonCard Class="mt-n2" />
+                <PersonCard FullName="@fullName" Class="mt-n2" />
                 <MudDivider Class="mb-2" />
                 <MudListItem Text="Account" Icon="@Icons.Material.Outlined.Person" Href="/personal/account" />
                 <MudListItem Text="Logout" Icon="@Icons.Material.Outlined.Login" Href="/pages/authentication/login" />
@@ -77,6 +79,7 @@
 
     public bool _drawerOpen = true;
     public bool _themeManagerOpen = false;
+    public string fullName = string.Empty;
 
     void DrawerToggle()
     {
@@ -94,8 +97,18 @@
         StateHasChanged();
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        // https://docs.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-5.0
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        fullName = user.GetFullName();
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo($"{UrlConstants.Login}?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}");
+        }
+
         _themeManager.Theme = new MudBlazorAdminDashboard();
         _themeManager.DrawerClipMode = DrawerClipMode.Always;
         _themeManager.FontFamily = "Montserrat";
