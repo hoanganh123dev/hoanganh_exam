@@ -14,7 +14,7 @@
     },
     {
       "name": "Run Admin App",
-      "configurations": ["Identity.STS.Identity", "Exam.API", "AdminApp"]
+      "configurations": ["Identity.STS.Identity", "Exam.API", "AdminApp", "Identity.Admin"]
     }
   ],
 
