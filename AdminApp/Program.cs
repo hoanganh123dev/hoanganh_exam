@@ -1,8 +1,3 @@
-using AdminApp.Core.Authentication;
-using AdminApp.Services.Interfaces;
-using AdminApp.Services;
-using Blazored.SessionStorage;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +18,7 @@ namespace AdminApp
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
+<<<<<<< HEAD:AdminApp/Program.cs
             builder.Services.AddBlazoredSessionStorage();
             builder.Services.AddAuthorizationCore();
             builder.Services.AddScoped<IAuthService, AuthService>();
@@ -45,6 +41,11 @@ namespace AdminApp
                 config.SnackbarConfiguration.ShowTransitionDuration = 500;
                 config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
             });
+=======
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+            builder.Services.AddMudServices();
+>>>>>>> parent of d57de7c (Login Admin App):src/WebApps/AdminApp/Program.cs
             await builder.Build().RunAsync();
         }
     }

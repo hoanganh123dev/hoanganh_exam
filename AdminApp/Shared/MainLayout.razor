@@ -1,7 +1,12 @@
+<<<<<<< HEAD:AdminApp/Shared/MainLayout.razor
 ﻿@inherits LayoutComponentBase
 @using Microsoft.AspNetCore.Components.Authorization
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
+=======
+@inherits LayoutComponentBase
+
+>>>>>>> parent of d57de7c (Login Admin App):src/WebApps/AdminApp/Shared/MainLayout.razor
 
 <MudThemeProvider Theme="_themeManager.Theme" />
 <MudDialogProvider FullWidth="true"
@@ -44,7 +49,7 @@
                 <MudAvatar Image="images/avatar_jonny.jpg" />
             </ActivatorContent>
             <ChildContent>
-                <PersonCard FullName="@fullName" Class="mt-n2" />
+                <PersonCard Class="mt-n2" />
                 <MudDivider Class="mb-2" />
                 <MudListItem Text="Account" Icon="@Icons.Material.Outlined.Person" Href="/personal/account" />
                 <MudListItem Text="Logout" Icon="@Icons.Material.Outlined.Login" Href="/pages/authentication/login" />
@@ -85,7 +90,11 @@
 
     public bool _drawerOpen = true;
     public bool _themeManagerOpen = false;
+<<<<<<< HEAD:AdminApp/Shared/MainLayout.razor
     public string fullName = string.Empty;
+=======
+
+>>>>>>> parent of d57de7c (Login Admin App):src/WebApps/AdminApp/Shared/MainLayout.razor
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
@@ -102,18 +111,8 @@
         StateHasChanged();
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        // https://docs.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-5.0
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        fullName = user.GetFullName();
-
-        if (!user.Identity.IsAuthenticated)
-        {
-            NavigationManager.NavigateTo($"{UrlConstants.Login}?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}");
-        }
-
         _themeManager.Theme = new MudBlazorAdminDashboard();
         _themeManager.DrawerClipMode = DrawerClipMode.Always;
         _themeManager.FontFamily = "Montserrat";

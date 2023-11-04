@@ -61,10 +61,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.STS.Identity", "sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{65CAA351-4A03-4EFB-8DD9-E44AF6F230E8}"
 EndProject
+<<<<<<< HEAD
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6535372C-2AE4-43D0-BE7A-922672151F23}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
+=======
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApps", "WebApps", "{75348568-BA50-440E-9D94-C030C6134FEE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminApp", "src\WebApps\AdminApp\AdminApp.csproj", "{36A748CF-2BD7-48B0-A700-166D10783358}"
+>>>>>>> parent of d57de7c (Login Admin App)
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApps", "WebApps", "{8B3FF9D2-2980-459A-8E3F-15704646A752}"
 EndProject

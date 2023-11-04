@@ -15,14 +15,6 @@
           {
             "Type": "name",
             "Value": "admin"
-          },
-          {
-            "Type": "given_name",
-            "Value": "Phan"
-          },
-          {
-            "Type": "family_name",
-            "Value": "Anh"
           }
         ]
       }
