@@ -1,10 +1,12 @@
+using System.Collections.Generic;
+using System.Linq;
 using Examination.Domain.AggregateModels.QuestionAggregate;
 using Examination.Domain.SeedWork;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Examination.Domain.AggregateModels.ExamResultAggregate
 {
-     public class ExamResultDetail : Entity
+    public class ExamResultDetail : Entity
     {
         public ExamResultDetail(Question question, IEnumerable<Answer> selectedAnswers, string explain)
         {

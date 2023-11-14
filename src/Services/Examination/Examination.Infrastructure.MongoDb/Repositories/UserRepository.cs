@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Examination.Domain.AggregateModels.UserAggregate;
 using Examination.Infrastructure.SeedWork;
 using MediatR;
@@ -10,7 +11,7 @@ namespace Examination.Infrastructure.Repositories
     {
         public UserRepository(
             IMongoClient mongoClient,
-        IOptions<ExamSettings> settings)
+        IOptions<ExamSettings> settings, IMediator mediator)
         : base(mongoClient, settings, Constants.Collections.User)
         {
         }

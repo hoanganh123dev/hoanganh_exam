@@ -1,22 +1,22 @@
-using System;
-using System.IO;
 using System.Reflection;
-using Examination.Infrastructure;
-using Examination.Infrastructure.SeedWork;
+using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using System;
+using Microsoft.Extensions.DependencyInjection;
+using Examination.Infrastructure;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using Serilog;
+using Examination.Infrastructure.SeedWork;
 
 namespace Examination.API
 {
     public class Program
     {
-         public static int Main(string[] args)
+        public static int Main(string[] args)
         {
             string appName = typeof(Startup).Namespace;
             var configuration = GetConfiguration();
@@ -78,7 +78,6 @@ namespace Examination.API
                 return builder.Build();
             }
         }
-
 
         public static IHostBuilder CreateHostBuilder(IConfiguration configuration, string[] args) =>
             Host.CreateDefaultBuilder(args)

@@ -1,3 +1,5 @@
+using System;
+
 namespace Examination.Domain.Exceptions
 {
     public class ExamDomainException : Exception

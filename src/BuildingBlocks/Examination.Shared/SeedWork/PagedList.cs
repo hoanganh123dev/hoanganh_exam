@@ -1,4 +1,4 @@
-﻿namespace Examination.Dtos.SeedWork
+﻿namespace Examination.Shared.SeedWork
 {
     public class PagedList<T>
     {

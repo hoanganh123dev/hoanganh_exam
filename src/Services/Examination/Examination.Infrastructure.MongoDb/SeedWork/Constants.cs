@@ -2,7 +2,7 @@ namespace Examination.Infrastructure.SeedWork
 {
     public class Constants
     {
-         public class Collections
+        public class Collections
         {
             public const string Category = "category";
             public const string Question = "question";

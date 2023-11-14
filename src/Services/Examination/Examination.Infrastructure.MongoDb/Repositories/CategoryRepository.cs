@@ -3,6 +3,9 @@ using Examination.Infrastructure.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Examination.Infrastructure.Repositories
 {
@@ -10,8 +13,8 @@ namespace Examination.Infrastructure.Repositories
     {
         public CategoryRepository(
           IMongoClient mongoClient,
-          IOptions<ExamSettings> settings
-          )
+          IOptions<ExamSettings> settings,
+          IMediator mediator)
       : base(mongoClient, settings, Constants.Collections.Category)
         {
         }

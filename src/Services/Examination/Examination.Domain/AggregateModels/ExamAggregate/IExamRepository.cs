@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Examination.Domain.SeedWork;
 
 namespace Examination.Domain.AggregateModels.ExamAggregate

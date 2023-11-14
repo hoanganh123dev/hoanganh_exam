@@ -1,10 +1,10 @@
-﻿namespace Examination.Dtos.SeedWork
+﻿namespace Examination.Shared.SeedWork
 {
     public class PagingParameters
     {
         const int maxPageSize = 50;
         public int PageNumber { get; set; } = 1;
-        private int _pageSize = 2;
+        private int _pageSize = 20;
         public int PageSize
         {
             get
@@ -13,7 +13,7 @@
             }
             set
             {
-                _pageSize = (value > maxPageSize) ? maxPageSize : value;
+                _pageSize = value > maxPageSize ? maxPageSize : value;
             }
         }
     }

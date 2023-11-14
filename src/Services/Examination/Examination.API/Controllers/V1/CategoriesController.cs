@@ -3,8 +3,8 @@ using Examination.Application.Commands.V1.Categories.DeleteCategory;
 using Examination.Application.Commands.V1.Categories.UpdateCategory;
 using Examination.Application.Queries.V1.Categories.GetCategoriesPaging;
 using Examination.Application.Queries.V1.Categories.GetCategoryById;
-using Examination.Dtos.Categories;
-using Examination.Dtos.SeedWork;
+using Examination.Shared.Categories;
+using Examination.Shared.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,10 +13,7 @@ using System.Threading.Tasks;
 
 namespace Examination.API.Controllers.V1
 {
-    [Route("api/v{version:apiVersion}/[controller]")]
-    [ApiController]
-    [ApiVersion("1.0")]
-    public class CategoriesController : ControllerBase
+    public class CategoriesController : BaseController
     {
         private readonly IMediator _mediator;
         private readonly ILogger<CategoriesController> _logger;

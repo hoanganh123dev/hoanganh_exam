@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Examination.Domain.AggregateModels.ExamAggregate;
 using Examination.Infrastructure.SeedWork;
 using MediatR;
@@ -8,7 +10,7 @@ namespace Examination.Infrastructure.Repositories
 {
     public class ExamRepository : BaseRepository<Exam>, IExamRepository
     {
-         public ExamRepository(
+        public ExamRepository(
             IMongoClient mongoClient,
             IOptions<ExamSettings> settings)
         : base(mongoClient, settings, Constants.Collections.Exam)

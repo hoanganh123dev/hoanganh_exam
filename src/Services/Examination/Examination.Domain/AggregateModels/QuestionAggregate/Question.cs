@@ -1,5 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Examination.Domain.SeedWork;
-using Examination.Dtos.Enums;
+using Examination.Shared.Enums;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Examination.Domain.AggregateModels.QuestionAggregate
@@ -7,7 +10,7 @@ namespace Examination.Domain.AggregateModels.QuestionAggregate
     public class Question : Entity, IAggregateRoot
     {
         public Question(string id, string content, QuestionType questionType, Level level, string categoryId,
-            IEnumerable<Answer> answers, string explain, string ownerUserId = null)
+            List<Answer> answers, string explain, string ownerUserId = null)
         {
             if (answers == null && !answers.Any())
                 throw new ArgumentNullException($"{nameof(answers)} can not be null.");
@@ -30,6 +33,8 @@ namespace Examination.Domain.AggregateModels.QuestionAggregate
 
         [BsonElement("categoryId")]
         public string CategoryId { get; set; }
+        [BsonElement("categoryName")]
+        public string CategoryName { get; set; }
 
         [BsonElement("answers")]
         public IEnumerable<Answer> Answers { set; get; }

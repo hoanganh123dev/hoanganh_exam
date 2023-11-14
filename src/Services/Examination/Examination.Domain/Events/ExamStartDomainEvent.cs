@@ -2,7 +2,7 @@ using MediatR;
 
 namespace Examination.Domain.Events
 {
-     public class ExamStartedDomainEvent : INotification
+    public class ExamStartedDomainEvent : INotification
     {
         public ExamStartedDomainEvent(string userId, string firstName, string lastName)
             => (UserId, FirstName, LastName) = (userId, firstName, lastName);
