@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Examination.Application.Queries.V1.Questions.GetQuestionsPaging
 {
-    public class GetQuestionsPagingQuery : IRequest<PagedList<QuestionDto>>
+    public class GetQuestionsPagingQuery : IRequest<ApiResult<PagedList<QuestionDto>>>
     {
         public string CategoryId { get; set; }
         public string SearchKeyword { get; set; }

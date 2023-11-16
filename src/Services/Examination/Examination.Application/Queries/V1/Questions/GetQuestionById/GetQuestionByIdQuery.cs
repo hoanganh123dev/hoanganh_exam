@@ -1,9 +1,10 @@
 ﻿using Examination.Shared.Questions;
+using Examination.Shared.SeedWork;
 using MediatR;
 
 namespace Examination.Application.Queries.V1.Questions.GetQuestionById
 {
-    public class GetQuestionByIdQuery : IRequest<QuestionDto>
+    public class GetQuestionByIdQuery : IRequest<ApiResult<QuestionDto>>
     {
         public GetQuestionByIdQuery(string id)
         {
