@@ -14,7 +14,6 @@ using AdminApp.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using AdminApp.Core.Authentication;
 using MudBlazor;
-using Examination.Shared.Questions;
 
 namespace AdminApp
 {
@@ -30,6 +29,7 @@ namespace AdminApp
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IQuestionService, QuestionService>();
+
             builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
 
             builder.Services.AddScoped(sp => new HttpClient
@@ -48,7 +48,7 @@ namespace AdminApp
                 config.SnackbarConfiguration.ShowTransitionDuration = 500;
                 config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
             });
-            await builder.Build().RunAsync();
+            await builder.Build().RunAsync();   
         }
     }
 }

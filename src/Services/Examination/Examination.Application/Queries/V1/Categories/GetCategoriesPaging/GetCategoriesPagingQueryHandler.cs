@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Examination.Application.Queries.V1.Categories.GetCategoriesPaging
 {
-    public class GetCategoriesPagingQueryHandler : IRequestHandler<GetCategoriesPagingQuery, ApiResult<PagedList<CategoryDto>>>
+    public class GetCategoriesPagingQueryHandler : IRequestHandler<GetCategoriesPagingQuery,ApiResult<PagedList<CategoryDto>>>
     {
 
         private readonly ICategoryRepository _categoryRepository;

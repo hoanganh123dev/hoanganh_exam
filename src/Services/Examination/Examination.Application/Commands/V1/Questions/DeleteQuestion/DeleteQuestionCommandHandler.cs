@@ -1,5 +1,4 @@
 ﻿using Examination.Domain.AggregateModels.QuestionAggregate;
-using Examination.Shared.Questions;
 using Examination.Shared.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -32,9 +31,9 @@ namespace Examination.Application.Commands.V1.Questions.DeleteQuestion
                 _logger.LogError($"Item is not found {request.Id}");
                 return new ApiErrorResult<bool>($"Item is not found {request.Id}");
             }
-            await _questionRepository.DeleteAsync(request.Id);
-            return new ApiSuccessResult<bool>(true,"Delete sussessful");
 
+            await _questionRepository.DeleteAsync(request.Id);
+            return new ApiSuccessResult<bool>(true, "Delete successful");
         }
     }
 }

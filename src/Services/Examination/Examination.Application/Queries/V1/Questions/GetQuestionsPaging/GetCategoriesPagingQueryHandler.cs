@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Examination.Domain.AggregateModels.QuestionAggregate;
-using Examination.Shared.Questions;
 using Examination.Shared.SeedWork;
+using Examination.Shared.Questions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
@@ -38,14 +38,16 @@ namespace Examination.Application.Queries.V1.Questions.GetQuestionsPaging
         {
             _logger.LogInformation("BEGIN: GetHomeExamListQueryHandler");
 
-            var result = await _QuestionRepository.GetQuestionsPagingAsync(request.CategoryId,
+            var result = await _QuestionRepository.GetQuestionsPagingAsync(request.CategoryId, 
                 request.SearchKeyword,
-                request.PageIndex, 
+                request.PageIndex,
                 request.PageSize);
+
             var items = _mapper.Map<List<QuestionDto>>(result.Items);
 
             _logger.LogInformation("END: GetHomeExamListQueryHandler");
             var pagedItems = new PagedList<QuestionDto>(items, result.MetaData.TotalCount, request.PageIndex, request.PageSize);
+
             return new ApiSuccessResult<PagedList<QuestionDto>>(pagedItems);
         }
     }

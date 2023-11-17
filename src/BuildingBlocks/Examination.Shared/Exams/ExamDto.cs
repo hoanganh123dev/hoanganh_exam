@@ -1,4 +1,5 @@
 using Examination.Shared.Enums;
+using System;
 
 namespace Examination.Shared.Exams
 {

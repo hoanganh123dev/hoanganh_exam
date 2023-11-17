@@ -35,7 +35,7 @@ namespace Examination.Application.Commands.V1.Categories.UpdateCategory
             itemToUpdate.Name = request.Name;
             itemToUpdate.UrlPath = request.UrlPath;
             await _categoryRepository.UpdateAsync(itemToUpdate);
-            return new ApiSuccessResult<bool>(true,"Update sussessful");
+            return new ApiSuccessResult<bool>(true, "Update successful");
         }
     }
 }

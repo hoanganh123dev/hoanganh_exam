@@ -52,6 +52,7 @@ namespace Examination.API
             {
                 options.ReportApiVersions = true;
             });
+
             services.AddVersionedApiExplorer(
                            options =>
                            {

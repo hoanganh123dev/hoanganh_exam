@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Examination.API.Controllers.V1
 {
+
     public class ExamsController : BaseController
     {
         private readonly IMediator _mediator;

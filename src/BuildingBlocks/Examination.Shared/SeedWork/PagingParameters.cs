@@ -1,4 +1,10 @@
-﻿namespace Examination.Shared.SeedWork
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Examination.Shared.SeedWork
 {
     public class PagingParameters
     {
@@ -13,7 +19,7 @@
             }
             set
             {
-                _pageSize = value > maxPageSize ? maxPageSize : value;
+                _pageSize = (value > maxPageSize) ? maxPageSize : value;
             }
         }
     }

@@ -4,6 +4,7 @@ using Examination.Shared.Categories;
 using Examination.Shared.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;

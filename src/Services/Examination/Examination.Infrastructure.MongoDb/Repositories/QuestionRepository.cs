@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using Examination.Domain.AggregateModels.QuestionAggregate;
+using Examination.Shared.SeedWork;
 using Examination.Infrastructure.SeedWork;
 using Examination.Shared.Questions;
-using Examination.Shared.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -31,7 +31,7 @@ namespace Examination.Infrastructure.Repositories
         {
             FilterDefinition<Question> filter = Builders<Question>.Filter.Empty;
             if (!string.IsNullOrEmpty(searchKeyword))
-                filter = Builders<Question>.Filter.Where(s => s.Content.Contains(searchKeyword) == true);
+                filter = Builders<Question>.Filter.Where(s => s.Content.Contains(searchKeyword));
 
             if (!string.IsNullOrEmpty(categoryId))
                 filter = Builders<Question>.Filter.Eq(s => s.CategoryId, categoryId);

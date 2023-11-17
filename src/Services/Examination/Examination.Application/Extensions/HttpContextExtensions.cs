@@ -40,5 +40,4 @@ namespace Examination.Application.Extensions
             throw new InvalidOperationException("The user id type is invalid.");
         }
     }
-
 }

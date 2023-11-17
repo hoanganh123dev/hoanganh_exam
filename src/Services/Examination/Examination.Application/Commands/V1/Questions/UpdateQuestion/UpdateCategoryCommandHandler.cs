@@ -45,8 +45,11 @@ namespace Examination.Application.Commands.V1.Questions.UpdateQuestion
             itemToUpdate.Answers = answers;
 
             itemToUpdate.Explain = request.Explain;
+
+
             await _questionRepository.UpdateAsync(itemToUpdate);
-            return new ApiSuccessResult<bool>(true,"Update sussessful");
+
+            return new ApiSuccessResult<bool>(true, "Delete successful");
         }
     }
 }

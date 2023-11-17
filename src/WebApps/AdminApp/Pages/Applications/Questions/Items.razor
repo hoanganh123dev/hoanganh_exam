@@ -31,7 +31,7 @@
                             <RowTemplate>
                                 <MudTd DataLabel="Name">@context.Content</MudTd>
                                 <MudTd DataLabel="Name">@context.Level</MudTd>
-                                <MudTd DataLabel="Name">@(context.QuestionType == QuestionType.SingleSelection ? "Single" : "Multiples") </MudTd>
+                                <MudTd DataLabel="Name">@(context.QuestionType == QuestionType.SingleSelection?"Single":"Multiples") </MudTd>
                                 <MudTd DataLabel="Name">@context.CategoryName</MudTd>
                                 <MudTd DataLabel="Name">@context.DateCreated.ToString("dd/MM/yyyy hh:mm")</MudTd>
                                 <MudTd>
@@ -58,7 +58,7 @@
     <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
 </MudOverlay>
 
-@code {
+@code{
 
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set; }
@@ -112,8 +112,12 @@
         try
         {
             var pagingResponse = await QuestionService.GetQuestionsPagingAsync(ListSearch);
-            Elements = pagingResponse.Items;
-            MetaData = pagingResponse.MetaData;
+            if (pagingResponse.IsSuccessed)
+            {
+                Elements = pagingResponse.ResultObj.Items;
+                MetaData = pagingResponse.ResultObj.MetaData;
+            }
+
             loading = false;
         }
         catch (Exception ex)
