@@ -1,11 +1,13 @@
 ﻿@page "/app/questions"
 @using Examination.Shared.Questions;
 @using Examination.Shared.Enums;
+@using Examination.Shared.Categories;
 @inject IQuestionService QuestionService
+@inject ICategoryService CategoryService
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 
-<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Question</MudText>
+<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Question List</MudText>
 <MudGrid>
     <MudItem xs="12" sm="12" md="12">
         <MudCard Elevation="25" Style="height:100%;">
@@ -18,6 +20,30 @@
             </MudCardHeader>
             <MudCardContent Class="px-0">
                 <MudGrid>
+                    <MudItem xs="12" sm="12" md="12">
+                        <div class="pa-3">
+                            <div class="d-flex" style="align-items: baseline;">
+                                <MudTextField @bind-Value="@SearchModel.Name"
+                                              Immediate="true"
+                                              Placeholder="Enter queston content..."
+                                              Clearable="true"
+                                              Class="mt-0 user-search-text"
+                                              AdornmentIcon="@Icons.Filled.Search" />
+
+                                <MudSelect Label="Choose category" @bind-Value="SearchModel.CategoryId"
+                                           Clearable="true" AdornmentColor="Color.Primary"
+                                           Style="width:200px">
+                                    @foreach (var item in Categories)
+                                    {
+                                        <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
+                                    }
+                                </MudSelect>
+                                <MudButton ButtonType="ButtonType.Button" Color="Color.Success" OnClick="HandleSearch">
+                                    Search
+                                </MudButton>
+                            </div>
+                        </div>
+                    </MudItem>
                     <MudItem xs="12" md="12">
                         <MudTable Items="@Elements" FixedHeader="true" FixedFooter="false" Height="400px">
                             <HeaderContent>
@@ -30,35 +56,35 @@
                             </HeaderContent>
                             <RowTemplate>
                                 <MudTd DataLabel="Name">@context.Content</MudTd>
-                                <MudTd DataLabel="Name">@context.Level</MudTd>
-                                <MudTd DataLabel="Name">@(context.QuestionType == QuestionType.SingleSelection?"Single":"Multiples") </MudTd>
-                                <MudTd DataLabel="Name">@context.CategoryName</MudTd>
-                                <MudTd DataLabel="Name">@context.DateCreated.ToString("dd/MM/yyyy hh:mm")</MudTd>
-                                <MudTd>
-                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="()=>NavigateToEdit(context.Id)" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Class="ma-2" />
-                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async ()=>await OnDeleteTask(context.Id)" Variant="Variant.Filled" Color="Color.Error" Size="Size.Large" Class="ma-2" />
+                                    <MudTd DataLabel="Name">@context.Level</MudTd>
+                                    <MudTd DataLabel="Name">@(context.QuestionType == QuestionType.SingleSelection ? "Single" : "Multiples") </MudTd>
+                                    <MudTd DataLabel="Name">@context.CategoryName</MudTd>
+                                    <MudTd DataLabel="Name">@context.DateCreated.ToString("dd/MM/yyyy hh:mm")</MudTd>
+                                    <MudTd>
+                                        <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="()=>NavigateToEdit(context.Id)" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Class="ma-2" />
+                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async ()=>await OnDeleteTask(context.Id)" Variant="Variant.Filled" Color="Color.Error" Size="Size.Large" Class="ma-2" />
 
-                                </MudTd>
-                            </RowTemplate>
+                                    </MudTd>
+                                </RowTemplate>
 
-                            <PagerContent>
-                                <Pagination MetaData="MetaData" Spread="5" SelectedPage="SelectedPage"></Pagination>
-                            </PagerContent>
-                        </MudTable>
-                    </MudItem>
-                </MudGrid>
+                                <PagerContent>
+                                    <Pagination MetaData="MetaData" Spread="5" SelectedPage="SelectedPage"></Pagination>
+                                </PagerContent>
+                            </MudTable>
+                        </MudItem>
+                    </MudGrid>
 
 
-            </MudCardContent>
-        </MudCard>
-    </MudItem>
-</MudGrid>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
 
-<MudOverlay Visible="loading" DarkBackground="true" Absolute="true">
-    <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
-</MudOverlay>
+    <MudOverlay Visible="loading" DarkBackground="true" Absolute="true">
+        <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+    </MudOverlay>
 
-@code{
+    @code {
 
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set; }
@@ -72,19 +98,20 @@
     private List<QuestionDto> Elements = new List<QuestionDto>();
     public MetaData MetaData { get; set; } = new MetaData();
 
-    private QuestionSearch ListSearch = new QuestionSearch();
-
+    private QuestionSearch SearchModel = new QuestionSearch();
+    private List<CategoryDto> Categories = new List<CategoryDto>();
 
 
     protected override async Task OnInitializedAsync()
     {
-        await GetTasks();
+        await FillData();
+        await FillCategories();
     }
 
-    public async Task SearchData(QuestionSearch taskListSearch)
+    public async Task SearchData(QuestionSearch searchModel)
     {
-        ListSearch = taskListSearch;
-        await GetTasks();
+        SearchModel = searchModel;
+        await FillData();
     }
 
     public async Task OnDeleteTask(string deleteId)
@@ -102,16 +129,26 @@
         if (!result.Cancelled)
         {
             await QuestionService.DeleteAsync(DeleteId);
-            await GetTasks();
+            await FillCategories();
+            await FillData();
         }
     }
 
-    private async Task GetTasks()
+    private async Task FillCategories()
+    {
+        var categoryResult = await CategoryService.GetAllCategoriesAsync();
+        if (categoryResult.IsSuccessed)
+        {
+            Categories = categoryResult.ResultObj;
+        }
+    }
+
+    private async Task FillData()
     {
         loading = true;
         try
         {
-            var pagingResponse = await QuestionService.GetQuestionsPagingAsync(ListSearch);
+            var pagingResponse = await QuestionService.GetQuestionsPagingAsync(SearchModel);
             if (pagingResponse.IsSuccessed)
             {
                 Elements = pagingResponse.ResultObj.Items;
@@ -130,12 +167,17 @@
 
     private async Task SelectedPage(int page)
     {
-        ListSearch.PageNumber = page;
-        await GetTasks();
+        SearchModel.PageNumber = page;
+        await FillData();
     }
 
     private void NavigateToEdit(string id)
     {
-        NavigationManager.NavigateTo($"/app/categories/details/{id}");
+        NavigationManager.NavigateTo($"/app/questions/details/{id}");
+    }
+
+    public async Task HandleSearch()
+    {
+        await FillData();
     }
 }
