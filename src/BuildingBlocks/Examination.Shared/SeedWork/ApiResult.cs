@@ -12,7 +12,6 @@ namespace Examination.Shared.SeedWork
         public string Message { get; set; }
         public T ResultObj { get; set; }
         public int StatusCode { set; get; }
-
         public ApiResult()
         {
         }

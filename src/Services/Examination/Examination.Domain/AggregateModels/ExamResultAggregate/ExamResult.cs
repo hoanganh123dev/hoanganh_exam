@@ -17,8 +17,11 @@ namespace Examination.Domain.AggregateModels.ExamResultAggregate
         [BsonElement("userId")]
         public string UserId { set; get; }
 
-        [BsonElement("examQuestionReviews")]
-        public IEnumerable<ExamResultDetail> ExamResultDetails { get; set; }
+        [BsonElement("questionResults")]
+        public List<QuestionResult> QuestionResults { get; set; }
+
+        [BsonElement("correctQuestionCount")]
+        public int CorrectQuestionCount { get; set; }
 
         [BsonElement("examDate")]
         public DateTime ExamStartDate { get; set; }
@@ -30,28 +33,6 @@ namespace Examination.Domain.AggregateModels.ExamResultAggregate
         public bool? Passed { get; set; }
 
         [BsonElement("finished")]
-        public bool Finished { get; set; }
-
-        public static ExamResult CreateNewResult(string userId, string examId)
-        {
-            var result = new ExamResult(userId, examId);
-            return result;
-        }
-
-        public void StartExam(string firstName, string lastName)
-        {
-            this.AddDomainEvent(new ExamStartedDomainEvent(UserId, firstName, lastName));
-        }
-
-        public void SetUserChoices(List<ExamResultDetail> examResultDetails)
-        {
-            ExamResultDetails = examResultDetails;
-        }
-
-        public void Finish()
-        {
-            Finished = true;
-            ExamFinishDate = DateTime.Now;
-        }
+        public bool Finished { get; set; }      
     }
 }

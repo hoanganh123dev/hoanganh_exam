@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Examination.Shared\Examination.Shared.csproj" />
     <ProjectReference Include="..\Examination.Application\Examination.Application.csproj" />
     <ProjectReference Include="..\Examination.Infrastructure.MongoDb\Examination.Infrastructure.MongoDb.csproj" />
   </ItemGroup>
