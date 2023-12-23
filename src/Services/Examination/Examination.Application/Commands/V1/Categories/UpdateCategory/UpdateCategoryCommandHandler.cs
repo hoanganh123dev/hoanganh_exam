@@ -29,7 +29,7 @@ namespace Examination.Application.Commands.V1.Categories.UpdateCategory
             if (itemToUpdate == null)
             {
                 _logger.LogError($"Item is not found {request.Id}");
-                return new ApiErrorResult<bool>(400,$"Item is not found {request.Id}");
+                return new ApiErrorResult<bool>(400, $"Item is not found {request.Id}");
             }
 
             itemToUpdate.Name = request.Name;

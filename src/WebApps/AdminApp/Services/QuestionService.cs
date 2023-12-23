@@ -47,9 +47,8 @@ namespace AdminApp.Services.Interfaces
             if (!string.IsNullOrEmpty(searchInput.Name))
                 queryStringParam.Add("searchKeyword", searchInput.Name);
 
-            if (!string.IsNullOrEmpty(searchInput.CategoryId))
-                queryStringParam.Add("CategoryId", searchInput.CategoryId);
-
+            if(!string.IsNullOrEmpty(searchInput.CategoryId))
+                queryStringParam.Add("categoryId", searchInput.CategoryId);
 
             string url = QueryHelpers.AddQueryString("/api/v1/Questions/paging", queryStringParam);
 

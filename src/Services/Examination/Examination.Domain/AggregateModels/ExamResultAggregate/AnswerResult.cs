@@ -19,7 +19,8 @@ namespace Examination.Domain.AggregateModels.ExamResultAggregate
 
         [BsonElement("userChosen")]
         public bool? UserChosen { get; set; }
+
         [BsonElement("isCorrect")]
-        public bool? IsCorrect { get; set; }
+        public bool IsCorrect { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿@page "/app/questions"
 @using Examination.Shared.Questions;
-@using Examination.Shared.Enums;
 @using Examination.Shared.Categories;
+@using Examination.Shared.Enums;
 @inject IQuestionService QuestionService
 @inject ICategoryService CategoryService
 @inject IDialogService DialogService
@@ -56,35 +56,35 @@
                             </HeaderContent>
                             <RowTemplate>
                                 <MudTd DataLabel="Name">@context.Content</MudTd>
-                                    <MudTd DataLabel="Name">@context.Level</MudTd>
-                                    <MudTd DataLabel="Name">@(context.QuestionType == QuestionType.SingleSelection ? "Single" : "Multiples") </MudTd>
-                                    <MudTd DataLabel="Name">@context.CategoryName</MudTd>
-                                    <MudTd DataLabel="Name">@context.DateCreated.ToString("dd/MM/yyyy hh:mm")</MudTd>
-                                    <MudTd>
-                                        <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="()=>NavigateToEdit(context.Id)" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Class="ma-2" />
-                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async ()=>await OnDeleteTask(context.Id)" Variant="Variant.Filled" Color="Color.Error" Size="Size.Large" Class="ma-2" />
+                                <MudTd DataLabel="Name">@context.Level</MudTd>
+                                <MudTd DataLabel="Name">@(context.QuestionType == QuestionType.SingleSelection?"Single":"Multiples") </MudTd>
+                                <MudTd DataLabel="Name">@context.CategoryName</MudTd>
+                                <MudTd DataLabel="Name">@context.DateCreated.ToString("dd/MM/yyyy hh:mm")</MudTd>
+                                <MudTd>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="()=>NavigateToEdit(context.Id)" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Class="ma-2" />
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async ()=>await OnDeleteTask(context.Id)" Variant="Variant.Filled" Color="Color.Error" Size="Size.Large" Class="ma-2" />
 
-                                    </MudTd>
-                                </RowTemplate>
+                                </MudTd>
+                            </RowTemplate>
 
-                                <PagerContent>
-                                    <Pagination MetaData="MetaData" Spread="5" SelectedPage="SelectedPage"></Pagination>
-                                </PagerContent>
-                            </MudTable>
-                        </MudItem>
-                    </MudGrid>
+                            <PagerContent>
+                                <Pagination MetaData="MetaData" Spread="5" SelectedPage="SelectedPage"></Pagination>
+                            </PagerContent>
+                        </MudTable>
+                    </MudItem>
+                </MudGrid>
 
 
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
-    </MudGrid>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
 
-    <MudOverlay Visible="loading" DarkBackground="true" Absolute="true">
-        <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
-    </MudOverlay>
+<MudOverlay Visible="loading" DarkBackground="true" Absolute="true">
+    <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+</MudOverlay>
 
-    @code {
+@code{
 
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set; }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Examination.Shared.ExamResults;
 using Examination.Shared.SeedWork;
 using MediatR;

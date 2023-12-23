@@ -62,8 +62,8 @@
             var question = Model.ExamResult.QuestionResults[index];
             <div class="quiz-ans-content mt-10px">
                 <div class="d-flex align-items-center">
-                    <span class="icon-element icon-element-sm mr-2 bg-@(question.Result==true?"5":"1") text-white">@(index + 1)</span>
-                    <h3 class="fs-22 font-weight-semi-bold">Question @(index + 1) of @Model.ExamResult.QuestionResults.Count</h3>
+                    <span class="icon-element icon-element-sm mr-2 bg-@(question.Result==true?"5":"1") text-white">@(index+1)</span>
+                    <h3 class="fs-22 font-weight-semi-bold">Question @(index+1) of @Model.ExamResult.QuestionResults.Count</h3>
                 </div>
                 <p class="pt-2">@question.Content</p>
                 <ul class="quiz-result-list pt-4 pl-3">

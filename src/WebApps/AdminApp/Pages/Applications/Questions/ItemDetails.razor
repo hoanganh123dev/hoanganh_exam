@@ -1,15 +1,14 @@
 ﻿@page "/app/questions/details/{Id}"
 @using Examination.Shared.Questions
-@using Microsoft.Extensions.Logging
 @using Examination.Shared.Categories
 @using Examination.Shared.Enums
+@using Microsoft.Extensions.Logging
 @inject IQuestionService QuestionService
 @inject ICategoryService CategoryService
-@inject ILogger<ItemDetails> Logger
+@inject ILogger<NewItem> Logger
 @inject ISnackbar Snackbar
-@inject NavigationManager NavigationManager;
+@inject NavigationManager NavigationManager
 @inject IDialogService DialogService
-
 
 <MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">@model.Content</MudText>
 

@@ -14,8 +14,17 @@ namespace Examination.Domain.AggregateModels.ExamResultAggregate
         [BsonElement("examId")]
         public string ExamId { get; set; }
 
+        [BsonElement("examTitle")]
+        public string ExamTitle { get; set; }
+
         [BsonElement("userId")]
         public string UserId { set; get; }
+
+        [BsonElement("email")]
+        public string Email { set; get; }
+
+        [BsonElement("fullName")]
+        public string FullName { set; get; }
 
         [BsonElement("questionResults")]
         public List<QuestionResult> QuestionResults { get; set; }
@@ -33,6 +42,6 @@ namespace Examination.Domain.AggregateModels.ExamResultAggregate
         public bool? Passed { get; set; }
 
         [BsonElement("finished")]
-        public bool Finished { get; set; }      
+        public bool Finished { get; set; }
     }
 }

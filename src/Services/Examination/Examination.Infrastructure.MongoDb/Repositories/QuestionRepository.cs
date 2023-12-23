@@ -39,12 +39,12 @@ namespace Examination.Infrastructure.Repositories
 
             var totalRow = await Collection.Find(filter).CountDocumentsAsync();
             var items = await Collection.Find(filter)
-                .SortByDescending(x => x.DateCreated)
+                .SortByDescending(x=>x.DateCreated)
                 .Skip((pageIndex - 1) * pageSize)
                 .Limit(pageSize)
                 .ToListAsync();
 
-            return new PagedList<Question>(items, totalRow, pageIndex, pageSize);
+            return new PagedList<Question>(items,totalRow,pageIndex,pageSize);
         }
 
         public async Task<List<Question>> GetRandomQuestionsForExamAsync(string categoryId, Level level, int numberOfQuestions)

@@ -38,7 +38,7 @@ namespace Examination.Application.Queries.V1.Questions.GetQuestionsPaging
         {
             _logger.LogInformation("BEGIN: GetHomeExamListQueryHandler");
 
-            var result = await _QuestionRepository.GetQuestionsPagingAsync(request.CategoryId,
+            var result = await _QuestionRepository.GetQuestionsPagingAsync(request.CategoryId, 
                 request.SearchKeyword,
                 request.PageIndex,
                 request.PageSize);

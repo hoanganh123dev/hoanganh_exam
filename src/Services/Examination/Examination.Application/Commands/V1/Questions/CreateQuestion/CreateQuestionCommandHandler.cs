@@ -60,7 +60,7 @@ namespace Examination.Application.Commands.V1.Questions.CreateQuestion
                 }
             }
             var answers = _mapper.Map<List<AnswerDto>, List<Answer>>(request.Answers);
-
+            
 
             var itemToAdd = new Question(questionId,
                                     request.Content,
@@ -68,8 +68,8 @@ namespace Examination.Application.Commands.V1.Questions.CreateQuestion
                                     request.Level,
                                     request.CategoryId,
                                     answers,
-                                    request.Explain,
-                                    _httpContextAccessor.GetUserId(),
+                                    request.Explain, 
+                                    _httpContextAccessor.GetUserId(), 
                                     category.Name);
 
             await _questionRepository.InsertAsync(itemToAdd);

@@ -10,4 +10,4 @@ namespace Examination.Shared.ExamResults
     {
         public string ExamResultId { get; set; }
     }
-}   
+}

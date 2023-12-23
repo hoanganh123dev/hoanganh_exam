@@ -1,6 +1,6 @@
 ﻿@page "/take-exam.html"
 @model PortalApp.Pages.Exams.TakeExamModel
-@section Scripts {
+@section Scripts{
     <environment include="Development">
         <script src="~/pages/exams/take_exam.js" asp-append-version="true"></script>
         <script>
@@ -50,7 +50,7 @@
                 {
                     <li>
                         <a href="#" class="icon-element icon-element-sm navigate-question" data-index="@index">
-                            @(index + 1)
+                            @(index+1)
                         </a>
                     </li>
                 }
@@ -94,6 +94,8 @@
         <div class="quiz-ans-content">
             <h3 class="fs-22 font-weight-semi-bold">Your Answer:</h3>
             <div class="quiz-ans-list py-3" id="divAnswers">
+
+
             </div><!-- end quiz-ans-list -->
             <p class="fs-15" id="lblNote"></p>
         </div>
